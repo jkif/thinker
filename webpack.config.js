@@ -3,7 +3,7 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var env = process.env.WEBPACK_ENV;
 var path = require('path');
 
-var libraryName = 'library';
+var libraryName = 'jkif_thinker';
 
 var plugins = [], outputFile;
 
@@ -15,7 +15,7 @@ if (env === 'build') {
 }
 
 var config = {
-  entry: __dirname + '/src/index.js',
+  entry: __dirname + '/src/jkif_thinker.js',
   devtool: 'source-map',
   output: {
     path: __dirname + '/lib',
@@ -27,14 +27,13 @@ var config = {
   module: {
     loaders: [
       {
-        test: /(\.jsx|\.js)$/,
+        test: /\.js$/,
         loader: 'babel',
+        query:{
+          presets: ['es2015']
+        },
+        include: /src/,
         exclude: /(node_modules|bower_components)/
-      },
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: "eslint-loader",
-        exclude: /node_modules/
       }
     ]
   },
