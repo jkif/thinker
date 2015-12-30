@@ -1,0 +1,35 @@
+{
+  "name": "jkif-thinker",
+  "version": "1.0.0",
+  "description": "An integrated JavaScript tool-set for machine inference over SUO-KIF",
+  "author": "Clark Feusier <cfeusier@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jkif/thinker"
+  },
+  "bugs": {
+    "url": "https://github.com/jkif/thinker/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jKif",
+    "KIF",
+    "SUO-KIF",
+    "JavaScript",
+    "Ontology",
+    "Semantics",
+    "Logic",
+    "Machine Inference"
+  ],
+  "main": "lib/jkif_thinker.js",
+  "scripts": {
+    "test": "for f in test/specs/**/*; do echo \"$f\"; mocha \"$f\"; done; exit 0"
+  },
+  "dependencies": {
+    "jkif-parser": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "mocha": "^2.2.1"
+  }
+}
