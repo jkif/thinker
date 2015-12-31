@@ -11,6 +11,9 @@ export default class TruthTree {
     this.closed = {};
     this.root = new Node(jkif);
     this.trunk = TruthTree.constructTrunk.call(this, jkif);
+    if (this.level < 1) {
+      this.root.decomposed = true;
+    }
   }
 
   static constructTrunk(jkif) {
@@ -24,7 +27,10 @@ export default class TruthTree {
   }
 
   isConsistent() {
-    return false;
+    if (this.level < 1) {
+      return false;
+    }
+    console.log(this.trunk);
   }
 
 }

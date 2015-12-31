@@ -28,6 +28,7 @@ var impl = Parser.parse(
 );
 var twoSentContra = Parser.parse('(not (?THING))(and (?THING))');
 var word = Parser.parse('word');
+var empty = Parser.parse('');
 var T = new Thinker();
 
 describe('.think', () => {
@@ -53,3 +54,4 @@ describe('.think', () => {
 
 // driver code
 var _t = T.think(impl);
+console.log(_t);
