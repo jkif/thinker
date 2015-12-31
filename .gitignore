@@ -4,5 +4,6 @@ pids
 *.pid
 *.seed
 .lock-wscript
+lib/
 build/Release
 node_modules
