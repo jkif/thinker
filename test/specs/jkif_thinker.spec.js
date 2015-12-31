@@ -12,7 +12,7 @@ var E = Parser.parse('(exists (?THING)(instance ?THING Entity))');
 var A = Parser.parse('(forall (?THING)(instance ?THING Entity))');
 var neg = Parser.parse('(not (?THING))');
 var varNode = Parser.parse('?THING');
-var relSent = Parser.parse('(intance ?F Farmer)');
+var relSent = Parser.parse('(instance ?F Farmer)');
 var conj = Parser.parse('(and (instance ?F Farmer)(instance ?T Tractor)(likes ?F ?T))');
 var disj = Parser.parse('(or (instance ?F Farmer)(instance ?F Food))');
 var equiv = Parser.parse('(<=>(instance ?CLASS Class)(subclass ?CLASS Entity))');
@@ -26,7 +26,8 @@ var impl = Parser.parse(
       (eventLocated ?EVENT ?PLACE)) \
     (playsRoleInEventOfType ?OBJ ?ROLE ?CLASS ?TIME ?PLACE))'
 );
-
+var twoSentContra = Parser.parse('(not (?THING))(and (?THING))');
+var word = Parser.parse('word');
 var T = new Thinker();
 
 describe('.think', () => {
@@ -51,4 +52,4 @@ describe('.think', () => {
 });
 
 // driver code
-var _t = T.think(relSent);
+var _t = T.think(impl);

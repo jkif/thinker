@@ -1,10 +1,22 @@
 'use strict';
+
 import NODE_REGISTRY from './node_registry';
+import ATOM_REGISTRY from './atom_registry';
+import R from 'ramda';
 
 export default class Node {
 
-  constructor(jkif) {
+  constructor(jkif, level, derivation) {
+    this.type = jkif.type;
+    this.level = level || 0;
+    this.locationData = jkif.locationData;
+    this.decomposed = this.type in ATOM_REGISTRY;
     this.proposition = Node.getProps(jkif);
+    this.derivation = derivation || Node.defaultDerivation();
+  }
+
+  static defaultDerivation() {
+    return { from: null, name: 'initialSentence' };
   }
 
   static getProps(jkif) {
@@ -36,6 +48,13 @@ export default class Node {
         break;
       case 'RelSentNode':
         return jkif.argumentList.concat(jkif.constant);
+        break;
+      case 'VariableNode':
+        return [jkif.variableName];
+        break;
+      case 'WordNode':
+        return [jkif.word];
+        break;
       default:
         return [];
     }
