@@ -32,6 +32,7 @@ var empty = Parser.parse('');
 var T = new Thinker();
 
 describe('.think', () => {
+
   it('should throw if given empty input', () => {
     var e;
     try {
@@ -41,6 +42,7 @@ describe('.think', () => {
     }
     expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
   });
+
   it('should throw if given non-jkif input', () => {
     var e;
     try {
@@ -50,8 +52,17 @@ describe('.think', () => {
     }
     expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
   });
-});
 
-// driver code
-var _t = T.think(impl);
-console.log(_t);
+  it('should return false if jkif input is empty', () => {
+    expect(T.think(empty)).to.be.false;
+  });
+
+  it('should return false if jkif input is inconsistent', () => {
+    expect(T.think(twoSentContra)).to.be.false;
+  });
+
+  it('should return true if jkif input is consistent', () => {
+    expect(T.think(relSent)).to.be.true;
+  });
+
+});

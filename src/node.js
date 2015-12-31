@@ -6,13 +6,15 @@ import R from 'ramda';
 
 export default class Node {
 
-  constructor(jkif, level, derivation) {
+  constructor(jkif, id, level, derivation) {
+    this.id = id;
     this.type = jkif.type;
     this.level = level || 0;
     this.locationData = jkif.locationData;
     this.decomposed = this.type in ATOM_REGISTRY;
     this.proposition = Node.getProps(jkif);
     this.derivation = derivation || Node.defaultDerivation();
+    this.negated = this.derivation.name === 'negatedDecomposition';
   }
 
   static defaultDerivation() {
@@ -35,8 +37,6 @@ export default class Node {
         return jkif.terms;
         break;
       case 'UniversalSentNode':
-        return jkif.variableList.concat(jkif.quantifiedSent);
-        break;
       case 'ExistentialSentNode':
         return jkif.variableList.concat(jkif.quantifiedSent);
         break;
