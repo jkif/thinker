@@ -14,7 +14,7 @@ export default class Thinker {
   think(jkif) {
 
     if (!jkif || !this.validateJkif(jkif)) {
-      throw new Error('can only think with jkif input');
+      throw new Error('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
     }
 
     // check if tree

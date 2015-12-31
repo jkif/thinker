@@ -35,7 +35,7 @@ describe('.think', () => {
     } catch (err) {
       e = err;
     }
-    expect(e.message).to.equal('can only think with jkif input');
+    expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
   });
   it('should throw if given non-jkif input', () => {
     var e;
@@ -44,6 +44,6 @@ describe('.think', () => {
     } catch (err) {
       e = err;
     }
-    expect(e.message).to.equal('can only think with jkif input');
+    expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
   });
 });
