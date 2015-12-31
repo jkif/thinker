@@ -6,6 +6,7 @@
 [ ![Codeship Status for jkif/thinker](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://codeship.com/projects/124475/)
 [ ![Current Stable npm Release](https://img.shields.io/badge/npm-install%20jkif--thinker-lightgrey.svg)](https://www.npmjs.com/package/jkif-thinker)
 [ ![Current License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 ---
 
 > **Created by [Clark Feusier](http://clarkfeusier.com/pages/about)**
