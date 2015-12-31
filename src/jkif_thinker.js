@@ -1,3 +1,5 @@
+'use strict';
+
 import TruthTree from './truth_tree';
 import NODE_REGISTRY from './node_registry';
 
@@ -12,14 +14,17 @@ export default class Thinker {
   }
 
   think(jkif) {
+    let tree = jkif;
 
     if (!jkif || !this.validateJkif(jkif)) {
       throw new Error('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
     }
 
-    // check if tree
-    // if not tree, convert to tree
-    // return tree.isConsistent(thinkOptions)
+    if (!TruthTree.isTruthTree(jkif)) {
+      tree = new TruthTree(jkif);
+    }
+
+    return tree.isConsistent();
   }
 
 }

@@ -1,3 +1,5 @@
+'use strict';
+
 var chai = require('chai');
 var Thinker = require('../../lib/jkif_thinker').default;
 var Parser = require('jkif-parser');
@@ -47,3 +49,6 @@ describe('.think', () => {
     expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
   });
 });
+
+// driver code
+T.think(relSent);
