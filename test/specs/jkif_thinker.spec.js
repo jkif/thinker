@@ -51,4 +51,4 @@ describe('.think', () => {
 });
 
 // driver code
-T.think(relSent);
+var _t = T.think(relSent);
