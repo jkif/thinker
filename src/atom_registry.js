@@ -1,6 +1,6 @@
 const ATOM_REGISTRY = {
   'WordNode': true,
-  // 'VariableNode': true,
+  'VariableNode': true,
   'StringLiteralNode': true,
   'NumericLiteralNode': true
 };
