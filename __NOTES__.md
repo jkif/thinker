@@ -5,6 +5,7 @@
 ##### Purpose: analyze sets of parsed SUO-KIF to determine consistency
 
 Input: a parsed set of SUO-KIF sentences
+
 Output: a boolean value
 
 - `sentence` -> formula
@@ -44,7 +45,3 @@ TT.constructor(JKIF)
 TT.isConsistent
   > TBD
 ```
-
-
-
-
