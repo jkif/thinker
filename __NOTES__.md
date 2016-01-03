@@ -4,7 +4,7 @@
 
 ##### Purpose: analyze sets of parsed SUO-KIF to determine consistency
 
-Input: a parsed set of SUO-KIF sentences
+Input: a parsed set of SUO-KIF sentences, timeout option
 
 Output: a boolean value
 
@@ -36,7 +36,7 @@ NumericLiteralNode    : (1), (0.1), (-1), (2e8)
 ---
 Thinker.think(JKIF)
   > Create TruthTree from JKIF -> TT
-  > Return TT.isConsistent()
+  > Return TT.isConsistent() / TT.isSatisfiable()?
 ---
 
 TT.constructor(JKIF)
@@ -45,3 +45,27 @@ TT.constructor(JKIF)
 TT.isConsistent
   > TBD
 ```
+
+#### Concrete Examples
+
+```
+# Target: (instance ?FIDDLE Entity)
+
+Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
+
+- RelSentNode:
+  - instance (relation name)
+  - ?FIDDLE (argument 1, variable)
+  - Entity (argument 2, word)
+
+  - I(fe) : Predicate I applies to f and e
+```
+
+#### Concrete Truth Tree Steps - VALIDITY - Propositional - NAIVE
+
+1. create set of propositions, premises + negated conclusion
+1. add annotations to each proposition
+1. start at proposition 1, make true
+1. check if branch closes
+1. repeat steps 3-4 for the remaining propositions
+1. evaluate tree

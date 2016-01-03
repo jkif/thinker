@@ -29,40 +29,43 @@ var impl = Parser.parse(
 var twoSentContra = Parser.parse('(not (?THING))(and (?THING))');
 var word = Parser.parse('word');
 var empty = Parser.parse('');
+var target = Parser.parse('(instance ?FIDDLE Entity)');
 var T = new Thinker();
 
-describe('.think', () => {
+console.log(target.expressions[0]);
 
-  it('should throw if given empty input', () => {
-    var e;
-    try {
-      T.think();
-    } catch (err) {
-      e = err;
-    }
-    expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
-  });
+// describe('.think', () => {
 
-  it('should throw if given non-jkif input', () => {
-    var e;
-    try {
-      T.think({ type: 'NotRealNode' });
-    } catch (err) {
-      e = err;
-    }
-    expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
-  });
+//   it('should throw if given empty input', () => {
+//     var e;
+//     try {
+//       T.think();
+//     } catch (err) {
+//       e = err;
+//     }
+//     expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
+//   });
 
-  it('should return false if jkif input is empty', () => {
-    expect(T.think(empty)).to.be.false;
-  });
+//   it('should throw if given non-jkif input', () => {
+//     var e;
+//     try {
+//       T.think({ type: 'NotRealNode' });
+//     } catch (err) {
+//       e = err;
+//     }
+//     expect(e.message).to.equal('Thinker.think needs jkif input. Try jkif-parser to parse into jkif.');
+//   });
 
-  it('should return false if jkif input is inconsistent', () => {
-    expect(T.think(twoSentContra)).to.be.false;
-  });
+//   it('should return false if jkif input is empty', () => {
+//     expect(T.think(empty)).to.be.false;
+//   });
 
-  it('should return true if jkif input is consistent', () => {
-    expect(T.think(relSent)).to.be.true;
-  });
+//   it('should return false if jkif input is inconsistent', () => {
+//     expect(T.think(twoSentContra)).to.be.false;
+//   });
 
-});
+//   it('should return true if jkif input is consistent', () => {
+//     expect(T.think(relSent)).to.be.true;
+//   });
+
+// });
