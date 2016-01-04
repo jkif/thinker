@@ -1,7 +1,10 @@
 # jKif Thinker
 
+#### ** _WORK IN PROGRESS_ **
+
 **jKif Thinker** is an integrated JavaScript tool-set for machine inference over SUO-KIF knowledgebases.
 
+<!--
 [ ![Current Stable Release Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/jkif/thinker/releases)
 [ ![Current License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [ ![Codeship Status for jkif/thinker](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://codeship.com/projects/124475/)
@@ -30,6 +33,8 @@
 
 ## Overview
 
+-->
+
 <!-- The **jKif Parser** facilitates the transmission and growth of formal knowledge by providing JavaScript access to the vast stores of open SUO-KIF ontologies and factbases.
 
 **Formal knowledge** is good for computers because it can be ***inferred over*** to generate new knowledge, with guaranteed consistency, given consistent input. Such guarantee cannot be made when reasoning over informal taxonomies constructed in RDF/OWL/AIF+, resulting in near uselessness for machine learning purposes.
@@ -40,19 +45,19 @@ However, access to said open ontologies and factbases is restricted because ther
 
 Enter the **jKif Parser** &mdash; providing simple JavaScript access to SUO-KIF, and thus, providing JavaScript access to the formal ontologies and factbases written in SUO-KIF. -->
 
----
+<!-- --- -->
 
-<!-- To learn more about knowledge representation, SUO-KIF, formal ontology, SUMO, Jison, or parsers, please explore the [appendix](#appendix). -->
+<!-- To learn more about knowledge representation, SUO-KIF, formal ontology, SUMO, Jison, or parsers, please explore the [appendix](#appendix).
 
 ---
 
 #### Dependencies
 
-<!-- - [Jison](http://zaach.github.io/jison/docs/) &mdash; generates LALR(1) parser
+- [Jison](http://zaach.github.io/jison/docs/) &mdash; generates LALR(1) parser
 - [Bluebird](https://github.com/petkaantonov/bluebird) &mdash; creates a Promise-interface for parser methods
 - [JSONFile](https://www.npmjs.com/package/jsonfile) &mdash; writes parser output to file in formatted JSON -->
 
----
+<!-- --- -->
 
 <!-- ## Installation
 
