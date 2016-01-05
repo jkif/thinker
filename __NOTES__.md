@@ -69,3 +69,31 @@ Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
 1. check if branch closes
 1. repeat steps 3-4 for the remaining propositions
 1. evaluate tree
+
+#### 001
+
+```shell
+# To test if a kwb is satisfiable...
+
+> create Truth Tree from kwb
+> traverse tree, breadth-first?
+> find model of based on expansion/unification of TT.trunk
+  > model : open path
+  > satisfiable : at least 1 open path (model)
+  > unsatisfiable : no model
+> assign truth values to tree
+> interpret tree in search for model
+
+# expansion
+> recursively, find main connective
+
+# unification
+>
+
+# assign truth values to tree
+>
+
+# interpret tree
+>
+
+```
