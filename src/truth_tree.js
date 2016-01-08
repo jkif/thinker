@@ -42,13 +42,6 @@ export default class TruthTree {
     if (this.level < 1) {
       return false;
     }
-
-    // recursive subroutine
-    // for each open stack
-      // for each node in stack
-        // decompose node via expansion (unify where possible)
-        // inspect tree for closure
-        // manage branches, *unify, apply heuristics, continue (iterate-recurse or recurse-iterate)
   }
 
 }

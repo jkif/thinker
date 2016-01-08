@@ -74,26 +74,72 @@ Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
 
 ```shell
 # To test if a kwb is satisfiable...
-
-> create Truth Tree from kwb
-> traverse tree, breadth-first?
-> find model of based on expansion/unification of TT.trunk
+... find a model
   > model : open path
   > satisfiable : at least 1 open path (model)
   > unsatisfiable : no model
-> assign truth values to tree
-> interpret tree in search for model
 
-# expansion
-> recursively, find main connective
+# Algorithm
 
-# unification
->
+> create Truth Tree from kwb
 
-# assign truth values to tree
->
+# kwb = [A, -B]
 
-# interpret tree
->
+# TT.branches = [ Branch([Node(A), Node(-B)]) ]
+
+# for each branch in TT.branches
+  branch <- Branch([Node(A), Node(-B)])
+
+  # is branch open?
+    > [] <- collect .expanded Nodes from branch
+    > does [] contain two contradictory nodes?
+      > contradictory nodes <- same node symbol x 2, one is negated
+    * yes:
+      > continue to next step
+    * no:
+      > mark branch closed, skip next step
+
+  # is branch decomposed?
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+traverse tree (breadth-first?) with subroutine
+> recursive subroutine
+> for each open branch, BRANCH, in TT
+    BASECASE 1:
+    > inspect BRANCH for closure
+    > if BRANCH is closed
+      > manage BRANCH, BREAK
+  > for each node, NODE, in BRANCH
+    > decompose NODE via expansion (one-level)
+    > unify BRANCH if possible
+    > continue to next node
+    > inspect TT for closure
+      > manage TT
+  > assign truth values to tree
+  > interpret tree in search for model
+# expansion
+> recursively, find main connective
+> keep track of open/closed paths(branches)
+> keep track of variables
+> keep track of quantifiers
+> main connective : negation <sub-rule> or <sub-rule>
+# unification
+# assign truth values to tree
+# interpret tree
+?? Propositional logic thinker first, then predicate logic?
+?? Propositional and predicate logic delivered together?
+-->
