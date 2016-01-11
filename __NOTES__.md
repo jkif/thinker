@@ -95,11 +95,12 @@ Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
     > does [] contain two contradictory nodes?
       > contradictory nodes <- same node symbol x 2, one is negated
     * yes:
-      > continue to next step
-    * no:
       > mark branch closed, skip next step
+    * no:
+      > continue to next step
 
   # is branch decomposed?
+    >
 
 ```
 
