@@ -26,13 +26,19 @@ var impl = Parser.parse(
       (eventLocated ?EVENT ?PLACE)) \
     (playsRoleInEventOfType ?OBJ ?ROLE ?CLASS ?TIME ?PLACE))'
 );
-var twoSentContra = Parser.parse('(not (?THING))(and (?THING))');
+var twoSentContra = Parser.parse('(not (?THING))(?THING)');
 var word = Parser.parse('word');
 var empty = Parser.parse('');
 var target = Parser.parse('(instance ?FIDDLE Entity)');
 var T = new Thinker();
 
-console.log(target.expressions[0]);
+var result = T.think(conj);
+
+console.log(result);
+
+
+
+// console.log(target.expressions[0]);
 
 // describe('.think', () => {
 

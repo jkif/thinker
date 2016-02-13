@@ -30,7 +30,52 @@ StringLiteralNode     : (''), ("")
 NumericLiteralNode    : (1), (0.1), (-1), (2e8)
 ```
 
-### Algorithm
+```shell
+# TruthTree
+> .__jkif : <KIFNode>
+> .LEVEL : Number (?0)
+> .NODE_TACTUS : Number (?0)
+> .trunk: .constructTrunk(.__jkif)
+> .branches : { live: []<Branch>, dead: []<Branch> }
+
+# Branch
+> .nodes : []<Node>
+> .live : Boolean (?true)
+
+# Node
+> .id : Number <NODE_TACTUS>
+> .level : Number <TruthTree.LEVEL> (?0)
+> .locationData : { <KIFNode>.locationData }
+> .type : String from <NodeRegistry>
+> .proposition : Node.getProps(self) -> []
+> .decomposed : .type in <AtomRegistry> -> Boolean
+> .negated : Boolean (?false)
+> .derivation : { from: Number<derivation-level>, name: String<derivation-rule> }
+  > Node.defaultDerivation() -> { from: null, name: 'initialSentence' }
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ### Algorithm
 
 ```
 ---
@@ -73,7 +118,7 @@ Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
 #### 001
 
 ```shell
-# To test if a kwb is satisfiable...
+> To test if a kwb is satisfiable...
 ... find a model
   > model : open path
   > satisfiable : at least 1 open path (model)
@@ -81,45 +126,40 @@ Parsed (length: 1) -> KIFNode.expressions[0] -> RelSentNode
 
 # Algorithm
 
-> create Truth Tree from kwb
+0. create Truth Tree from kwb
 
-# kwb = [A, -B]
+- kwb = [A, -B]
 
-# TT.branches = [ Branch([Node(A), Node(-B)]) ]
+- TT.branches = [ Branch([Node(A), Node(-B)]) ]
 
-# for each branch in TT.branches
+1. for each branch in TT.branches
   branch <- Branch([Node(A), Node(-B)])
 
-  # is branch open?
-    > [] <- collect .expanded Nodes from branch
-    > does [] contain two contradictory nodes?
-      > contradictory nodes <- same node symbol x 2, one is negated
+  1.1. is branch closed?
+    > [] <- collect .atomic Nodes from branch
+    > does [] contain two contradictory (.atomic) nodes?
+      > contradictory (.atomic) nodes <- same node symbol x 2, one is negated
     * yes:
-      > mark branch closed, skip next step
+      1.1.1. mark branch .closed, skip 1.2
     * no:
-      > continue to next step
+      1.1.2. continue to 1.2
 
-  # is branch decomposed?
-    >
+  - branch.decomposed is a computed property
+    > traverse all nodes in branch
+      > .completed node(s).atomic flags
 
-```
+  1.2. is branch decomposed (and .closed is false)?
+    > check branch.decomposed boolean flag
+    * yes:
+      1.2.1.
+    * no:
+      1.2.2. ?
 
-
-
-
-
-
-
-
-
-
-
-
+``` -->
 
 <!--
-traverse tree (breadth-first?) with subroutine
-> recursive subroutine
-> for each open branch, BRANCH, in TT
+traverse tree
+> for each branch, BRANCH, in TT
     BASECASE 1:
     > inspect BRANCH for closure
     > if BRANCH is closed

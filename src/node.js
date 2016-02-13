@@ -2,19 +2,21 @@
 
 import NODE_REGISTRY from './node_registry';
 import ATOM_REGISTRY from './atom_registry';
+import DERIVATION_REGISTRY from './derivation_registry';
 import R from 'ramda';
 
 export default class Node {
 
-  constructor(jkif, id, level, derivation) {
+  constructor(jkif, id, level = 0, derivation = Node.defaultDerivation()) {
     this.id = id;
-    this.type = jkif.type;
-    this.level = level || 0;
+    this.level = level;
     this.locationData = jkif.locationData;
-    this.decomposed = this.type in ATOM_REGISTRY;
+    this.type = jkif.type;
     this.proposition = Node.getProps(jkif);
-    this.derivation = derivation || Node.defaultDerivation();
-    this.negated = this.derivation.name === 'negatedDecomposition';
+    this.atomic = this.type in ATOM_REGISTRY;
+    this.completed = false;
+    this.derivation = derivation;
+    this.negated = this.derivation.name in DERIVATION_REGISTRY.negations;
   }
 
   static defaultDerivation() {

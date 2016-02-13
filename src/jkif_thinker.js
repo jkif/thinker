@@ -24,7 +24,7 @@ export default class Thinker {
       tree = new TruthTree(jkif);
     }
 
-    return tree.isConsistent();
+    return tree.isSatisfiable();
   }
 
 }
