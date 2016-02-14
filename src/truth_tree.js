@@ -99,6 +99,21 @@ export default class TruthTree {
       case 'ImplicationNode':
         node.completed = true;
         this.manageBranchingBranches(this.createImplication(node));
+        break;
+      // case 'EquationNode':
+        // CURRENTLY being treated as semantic whole until shift to predicate logic
+        // the two terms in node.proposition have to have the exact same (reference/resolution) data
+        // node.completed = true;
+        // break;
+      case 'EquivalenceNode':
+        node.completed = true;
+        this.manageBranchingDoubleBranches(this.createEquivalence(node));
+        break;
+      case 'NegationNode':
+        node.completed = true;
+        console.log(node);
+        // Handle 6? different types of negation decomposition
+        break;
       default:
         node.completed = true;
         return;
@@ -125,6 +140,15 @@ export default class TruthTree {
     this.addToAllBranches(nodesToAdd[0], this.branches.live);
     this.addToAllBranches(nodesToAdd[1], clonedBranches);
     this.branches.live = this.branches.live.concat(clonedBranches);
+  }
+
+  manageBranchingDoubleBranches(branches) {
+    // let clonedBranches = this.cloneAllLiveBranches();
+    // this.addToAllBranches(branches[0], this.branches.live);
+    // R.forEach(function(node) {
+    //   this.addToAllBranches(node, clonedBranches);
+    // }.bind(this), branches[1]);
+    // this.branches.live = this.branches.live.concat(clonedBranches);
   }
 
   createConjunctionNode(level, conjunct) {
@@ -156,6 +180,10 @@ export default class TruthTree {
     let _nodes = R.map(this.createImplicationNode.bind(this, node.level), node.proposition);
     _nodes[0].negated = true;
     return _nodes;
+  }
+
+  createEquivalence(node) {
+    console.log(node);
   }
 
   static constructTrunk(jkif) {

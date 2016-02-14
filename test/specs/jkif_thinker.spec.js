@@ -16,6 +16,7 @@ var relSent = Parser.parse('(instance ?F Farmer)');
 var conj = Parser.parse('(and (instance ?F Farmer)(instance ?T Tractor)(likes ?F ?T))');
 var disj = Parser.parse('(or (instance ?F Farmer)(instance ?F Food))');
 var equiv = Parser.parse('(<=>(instance ?CLASS Class)(subclass ?CLASS Entity))');
+var equation = Parser.parse('(= 1 2)');
 var impl = Parser.parse(
   '(=> \
     (and \
@@ -32,7 +33,7 @@ var empty = Parser.parse('');
 var target = Parser.parse('(instance ?FIDDLE Entity)');
 var T = new Thinker();
 
-var result = T.think(impl, { timeout: 0 });
+var result = T.think(equiv);
 
 console.log(result);
 
