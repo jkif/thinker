@@ -20,87 +20,6 @@ export default class TruthTree {
     this.options = options;
   }
 
-  static constructTrunk(jkif) {
-    return R.map((prop) => {
-      return new Node(prop, ++this.NODE_TACTUS, ++this.LEVEL);
-    }, Node.getProps(jkif));
-  }
-
-  static isTruthTree(candidate) {
-    return candidate.__proto__.constructor === this;
-  }
-
-  static negatedNodes(nodes) {
-    return R.filter(function(atomicNode) {
-      return atomicNode.negated;
-    }, nodes);
-  }
-
-  static atomicCompletedNodes(nodes) {
-    return R.filter(function(node) {
-      return node.atomic && node.completed;
-    }, nodes);
-  }
-
-  static workingNodes(nodes) {
-    return R.filter(function(node) {
-      return !node.completed;
-    }, nodes);
-  }
-
-  addToAllBranches(nodeOrNodes, branches) {
-    R.forEach(function(branch) {
-      branch.nodes = branch.nodes.concat(nodeOrNodes);
-    }, branches);
-  }
-
-  cloneAllLiveBranches() {
-    return R.map(function(branch) {
-      let clonedNodes = R.map(function(node) {
-        return new Node(node, ++this.NODE_TACTUS);
-      }.bind(this), branch.nodes);
-      return new Branch(clonedNodes, ++this.BRANCH_TACTUS, branch.decomposed);
-    }.bind(this), this.branches.live);
-  }
-
-  manageBranchingStacks(nodesToAdd) {
-    let clonedBranches = this.cloneAllLiveBranches();
-    this.addToAllBranches(nodesToAdd[0], this.branches.live);
-    this.addToAllBranches(nodesToAdd[1], clonedBranches);
-    this.branches.live = this.branches.live.concat(clonedBranches);
-  }
-
-  createConjunctionNode(level, conjunct) {
-    let derivationRule = { from: level, name: 'conjunctionDecomposition' };
-    return new Node(conjunct, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
-  }
-
-  createDisjunctionNode(level, disjunct) {
-    let derivationRule = { from: level, name: 'disjunctionDecomposition' };
-    return new Node(disjunct, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
-  }
-
-  createImplicationNode(level, expression) {
-    let derivationRule = { from: level, name: 'implicationDecomposition' };
-    return new Node(expression, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
-  }
-
-  createConjuncts(node) {
-    return R.map(this.createConjunctionNode.bind(this, node.level), node.proposition);
-  }
-
-  createDisjuncts(node) {
-    ++this.LEVEL;
-    return R.map(this.createDisjunctionNode.bind(this, node.level), node.proposition);
-  }
-
-  createImplication(node) {
-    ++this.LEVEL;
-    let _nodes = R.map(this.createImplicationNode.bind(this, node.level), node.proposition);
-    _nodes[0].negated = true;
-    return _nodes;
-  }
-
   decomposeNode(node) {
     switch (node.type) {
       case 'ConjunctionNode':
@@ -109,11 +28,11 @@ export default class TruthTree {
         break;
       case 'DisjunctionNode':
         node.completed = true;
-        this.manageBranchingStacks(this.createDisjuncts(node));
+        this.manageBranchingBranches(this.createDisjuncts(node));
         break;
       case 'ImplicationNode':
         node.completed = true;
-        this.manageBranchingStacks(this.createImplication(node));
+        this.manageBranchingBranches(this.createImplication(node));
       default:
         node.completed = true;
         return;
@@ -168,6 +87,87 @@ export default class TruthTree {
     return R.any(function(branch) {
       return branch.decomposed && branch.live;
     }.bind(this), this.branches.live);
+  }
+
+  addToAllBranches(nodeOrNodes, branches) {
+    R.forEach(function(branch) {
+      branch.nodes = branch.nodes.concat(nodeOrNodes);
+    }, branches);
+  }
+
+  cloneAllLiveBranches() {
+    return R.map(function(branch) {
+      let clonedNodes = R.map(function(node) {
+        return new Node(node, ++this.NODE_TACTUS);
+      }.bind(this), branch.nodes);
+      return new Branch(clonedNodes, ++this.BRANCH_TACTUS, branch.decomposed);
+    }.bind(this), this.branches.live);
+  }
+
+  manageBranchingBranches(nodesToAdd) {
+    let clonedBranches = this.cloneAllLiveBranches();
+    this.addToAllBranches(nodesToAdd[0], this.branches.live);
+    this.addToAllBranches(nodesToAdd[1], clonedBranches);
+    this.branches.live = this.branches.live.concat(clonedBranches);
+  }
+
+  createConjunctionNode(level, conjunct) {
+    let derivationRule = { from: level, name: 'conjunctionDecomposition' };
+    return new Node(conjunct, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
+  }
+
+  createDisjunctionNode(level, disjunct) {
+    let derivationRule = { from: level, name: 'disjunctionDecomposition' };
+    return new Node(disjunct, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+  }
+
+  createImplicationNode(level, expression) {
+    let derivationRule = { from: level, name: 'implicationDecomposition' };
+    return new Node(expression, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+  }
+
+  createConjuncts(node) {
+    return R.map(this.createConjunctionNode.bind(this, node.level), node.proposition);
+  }
+
+  createDisjuncts(node) {
+    ++this.LEVEL;
+    return R.map(this.createDisjunctionNode.bind(this, node.level), node.proposition);
+  }
+
+  createImplication(node) {
+    ++this.LEVEL;
+    let _nodes = R.map(this.createImplicationNode.bind(this, node.level), node.proposition);
+    _nodes[0].negated = true;
+    return _nodes;
+  }
+
+  static constructTrunk(jkif) {
+    return R.map((prop) => {
+      return new Node(prop, ++this.NODE_TACTUS, ++this.LEVEL);
+    }, Node.getProps(jkif));
+  }
+
+  static isTruthTree(candidate) {
+    return candidate.__proto__.constructor === this;
+  }
+
+  static negatedNodes(nodes) {
+    return R.filter(function(atomicNode) {
+      return atomicNode.negated;
+    }, nodes);
+  }
+
+  static atomicCompletedNodes(nodes) {
+    return R.filter(function(node) {
+      return node.atomic && node.completed;
+    }, nodes);
+  }
+
+  static workingNodes(nodes) {
+    return R.filter(function(node) {
+      return !node.completed;
+    }, nodes);
   }
 
 }
