@@ -20,26 +20,43 @@ export default class TruthTree {
     this.options = options;
   }
 
-  decomposeNode(node) {
-    switch (node.type) {
-      case 'ConjunctionNode':
-        node.completed = true;
-        this.addToAllBranches(this.createConjuncts(node), this.branches.live);
-        break;
-      case 'DisjunctionNode':
-        node.completed = true;
-        this.manageBranchingBranches(this.createDisjuncts(node));
-        break;
-      case 'ImplicationNode':
-        node.completed = true;
-        this.manageBranchingBranches(this.createImplication(node));
-      default:
-        node.completed = true;
-        return;
+  isSatisfiable() {
+    if (this.LEVEL < 1) {
+      return false;
+    }
+    this.thinking = true;
+    this.setTimer();
+    this.createTableaux();
+    return this.evaluateTableaux();
+  }
+
+  createTableaux() {
+    for (let i = 0; i < this.branches.live.length; i++) {
+      let branch = this.branches.live[i];
+      if (!this.thinking) {
+        throw 'Timeout option made Thinker exit before reaching a conclusion';
+      }
+      while (!branch.decomposed && branch.live && this.thinking) {
+        this.createTableau(branch);
+      }
     }
   }
 
-  work(liveBranch) {
+  evaluateTableaux() {
+    return R.any(function(branch) {
+      return branch.decomposed && branch.live;
+    }.bind(this), this.branches.live);
+  }
+
+  setTimer() {
+    if (R.type(this.options.timeout) === 'Number') {
+      setTimeout(function() {
+        this.thinking = false;
+      }.bind(this), this.options.timeout);
+    }
+  }
+
+  createTableau(liveBranch) {
     let atomicCompleted = TruthTree.atomicCompletedNodes(liveBranch.nodes);
     if (atomicCompleted.length) {
       if (TruthTree.negatedNodes(atomicCompleted).length) {
@@ -59,34 +76,23 @@ export default class TruthTree {
     }
   }
 
-  isSatisfiable() {
-    this.thinking = true;
-
-    if (this.LEVEL < 1) {
-      return false;
+  decomposeNode(node) {
+    switch (node.type) {
+      case 'ConjunctionNode':
+        node.completed = true;
+        this.addToAllBranches(this.createConjuncts(node), this.branches.live);
+        break;
+      case 'DisjunctionNode':
+        node.completed = true;
+        this.manageBranchingBranches(this.createDisjuncts(node));
+        break;
+      case 'ImplicationNode':
+        node.completed = true;
+        this.manageBranchingBranches(this.createImplication(node));
+      default:
+        node.completed = true;
+        return;
     }
-
-    if (R.type(this.options.timeout) === 'Number') {
-      setTimeout(function() {
-        this.thinking = false;
-      }.bind(this), this.options.timeout);
-    }
-
-    for (let i = 0; i < this.branches.live.length; i++) {
-      let branch = this.branches.live[i];
-
-      if (!this.thinking) {
-        throw 'Timeout option made Thinker exit before reaching a conclusion';
-      }
-
-      while (!branch.decomposed && branch.live && this.thinking) {
-        this.work(branch);
-      }
-    }
-
-    return R.any(function(branch) {
-      return branch.decomposed && branch.live;
-    }.bind(this), this.branches.live);
   }
 
   addToAllBranches(nodeOrNodes, branches) {
