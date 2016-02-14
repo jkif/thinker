@@ -30,12 +30,6 @@ export default class TruthTree {
     return candidate.__proto__.constructor === this;
   }
 
-  addToAllLiveBranches(nodeOrNodes) {
-    R.forEach(function(branch) {
-      branch.nodes = branch.nodes.concat(nodeOrNodes);
-    }.bind(this), this.branches.live);
-  }
-
   static negatedNodes(nodes) {
     return R.filter(function(atomicNode) {
       return atomicNode.negated;
@@ -52,6 +46,54 @@ export default class TruthTree {
     return R.filter(function(node) {
       return !node.completed;
     }, nodes);
+  }
+
+  addToAllBranches(nodeOrNodes, branches) {
+    R.forEach(function(branch) {
+      branch.nodes = branch.nodes.concat(nodeOrNodes);
+    }, branches);
+  }
+
+  cloneAllLiveBranches() {
+    return R.map(function(branch) {
+      let clonedNodes = R.map(function(node) {
+        return new Node(node, ++this.NODE_TACTUS);
+      }.bind(this), branch.nodes);
+      return new Branch(clonedNodes, ++this.BRANCH_TACTUS, branch.decomposed);
+    }.bind(this), this.branches.live);
+  }
+
+  manageBranchingStacks(nodesToAdd) {
+    let clonedBranches = this.cloneAllLiveBranches();
+    this.addToAllBranches(nodesToAdd[0], this.branches.live);
+    this.addToAllBranches(nodesToAdd[1], clonedBranches);
+    this.branches.live = this.branches.live.concat(clonedBranches);
+  }
+
+  decomposeNode(node) {
+    let derivationRule = { from: node.level };
+    switch (node.type) {
+      case 'ConjunctionNode':
+        derivationRule.name = 'conjunctionDecomposition';
+        let conjuncts = R.map(function(conjunctNode) {
+          return new Node(conjunctNode, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
+        }.bind(this), node.proposition);
+        node.completed = true;
+        this.addToAllBranches(conjuncts, this.branches.live);
+        break;
+      case 'DisjunctionNode':
+        derivationRule.name = 'disjunctionDecomposition';
+        ++this.LEVEL;
+        let disjuncts = R.map(function(disjunctNode) {
+          return new Node(disjunctNode, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+        }.bind(this), node.proposition);
+        node.completed = true;
+        this.manageBranchingStacks(disjuncts);
+        break;
+      default:
+        node.completed = true;
+        return;
+    }
   }
 
   work(liveBranch) {
@@ -74,26 +116,7 @@ export default class TruthTree {
 
     // if branch is still live, decompose each node and repeat
     if (liveBranch.live) {
-      var newNodes = [];
-
-      R.forEach(function(node) {
-
-        switch (node.type) {
-          case 'ConjunctionNode':
-            let derivationRule = { from: node.level, name: 'conjunctionDecomposition' };
-            let conjuncts = R.map(function(conjunctNode) {
-              return new Node(conjunctNode, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
-            }.bind(this), node.proposition);
-            node.completed = true;
-            newNodes = newNodes.concat(conjuncts);
-            this.addToAllLiveBranches(newNodes);
-            break;
-          default:
-            node.completed = true;
-            return;
-        }
-
-      }.bind(this), _workingNodes);
+      R.forEach(this.decomposeNode.bind(this), _workingNodes);
     }
   }
 
@@ -113,11 +136,16 @@ export default class TruthTree {
     for (let i = 0; i < this.branches.live.length; i++) {
       let branch = this.branches.live[i];
 
+      // console.log(branch);
+      // console.log('before');
       while (!branch.decomposed && branch.live && this.thinking) {
         this.work(branch);
       }
+      // console.log('after');
+      // console.log(branch);
     }
 
+    console.log(this)
     this.thinking = false;
 
     return R.any(function(branch) {

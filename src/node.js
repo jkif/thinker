@@ -9,14 +9,29 @@ export default class Node {
 
   constructor(jkif, id, level = 0, derivation = Node.defaultDerivation()) {
     this.id = id;
-    this.level = level;
-    this.locationData = jkif.locationData;
-    this.type = jkif.type;
-    this.proposition = Node.getProps(jkif);
-    this.atomic = this.type in ATOM_REGISTRY;
-    this.completed = false;
-    this.derivation = derivation;
-    this.negated = this.derivation.name in DERIVATION_REGISTRY.negations;
+    if (Node.isNode(jkif)) {
+      this.level = jkif.level;
+      this.locationData = jkif.locationData;
+      this.type = jkif.type;
+      this.proposition = jkif.proposition;
+      this.atomic = jkif.atomic;
+      this.completed = jkif.completed;
+      this.derivation = jkif.derivation;
+      this.negated = jkif.negated;
+    } else {
+      this.level = level;
+      this.locationData = jkif.locationData;
+      this.type = jkif.type;
+      this.proposition = Node.getProps(jkif);
+      this.atomic = this.type in ATOM_REGISTRY;
+      this.completed = false;
+      this.derivation = derivation;
+      this.negated = this.derivation.name in DERIVATION_REGISTRY.negations;
+    }
+  }
+
+  static isNode(candidate) {
+    return candidate.__proto__.constructor === Node;
   }
 
   static defaultDerivation() {

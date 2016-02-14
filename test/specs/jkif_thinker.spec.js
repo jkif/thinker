@@ -32,7 +32,7 @@ var empty = Parser.parse('');
 var target = Parser.parse('(instance ?FIDDLE Entity)');
 var T = new Thinker();
 
-var result = T.think(conj);
+var result = T.think(disj);
 
 console.log(result);
 
