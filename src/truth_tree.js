@@ -70,26 +70,50 @@ export default class TruthTree {
     this.branches.live = this.branches.live.concat(clonedBranches);
   }
 
+  createConjunctionNode(level, conjunct) {
+    let derivationRule = { from: level, name: 'conjunctionDecomposition' };
+    return new Node(conjunct, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
+  }
+
+  createDisjunctionNode(level, disjunct) {
+    let derivationRule = { from: level, name: 'disjunctionDecomposition' };
+    return new Node(disjunct, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+  }
+
+  createImplicationNode(level, expression) {
+    let derivationRule = { from: level, name: 'implicationDecomposition' };
+    return new Node(expression, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+  }
+
+  createConjuncts(node) {
+    return R.map(this.createConjunctionNode.bind(this, node.level), node.proposition);
+  }
+
+  createDisjuncts(node) {
+    ++this.LEVEL;
+    return R.map(this.createDisjunctionNode.bind(this, node.level), node.proposition);
+  }
+
+  createImplication(node) {
+    ++this.LEVEL;
+    let _nodes = R.map(this.createImplicationNode.bind(this, node.level), node.proposition);
+    _nodes[0].negated = true;
+    return _nodes;
+  }
+
   decomposeNode(node) {
-    let derivationRule = { from: node.level };
     switch (node.type) {
       case 'ConjunctionNode':
-        derivationRule.name = 'conjunctionDecomposition';
-        let conjuncts = R.map(function(conjunctNode) {
-          return new Node(conjunctNode, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
-        }.bind(this), node.proposition);
         node.completed = true;
-        this.addToAllBranches(conjuncts, this.branches.live);
+        this.addToAllBranches(this.createConjuncts(node), this.branches.live);
         break;
       case 'DisjunctionNode':
-        derivationRule.name = 'disjunctionDecomposition';
-        ++this.LEVEL;
-        let disjuncts = R.map(function(disjunctNode) {
-          return new Node(disjunctNode, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
-        }.bind(this), node.proposition);
         node.completed = true;
-        this.manageBranchingStacks(disjuncts);
+        this.manageBranchingStacks(this.createDisjuncts(node));
         break;
+      case 'ImplicationNode':
+        node.completed = true;
+        this.manageBranchingStacks(this.createImplication(node));
       default:
         node.completed = true;
         return;
