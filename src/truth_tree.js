@@ -117,8 +117,11 @@ export default class TruthTree {
         let [decompositionType, negationNodes] = this.createNegation(node);
         if (decompositionType === 'stack') {
           this.addToAllBranches(negationNodes, this.branches.live);
-        }
+        } else if (decompositionType === 'branch') {
 
+        } else if (decompositionType === 'branch-stacks') {
+
+        }
         break;
       default:
         node.completed = true;
