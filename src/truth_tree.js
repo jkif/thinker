@@ -166,6 +166,11 @@ export default class TruthTree {
     return new Node(expression, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
   }
 
+  createEquivalenceNode(level, expression) {
+    let derivationRule = { from: level, name: 'equivalenceDecomposition' };
+    return new Node(expression, ++this.NODE_TACTUS, this.LEVEL, derivationRule);
+  }
+
   createConjuncts(node) {
     return R.map(this.createConjunctionNode.bind(this, node.level), node.proposition);
   }
@@ -183,7 +188,18 @@ export default class TruthTree {
   }
 
   createEquivalence(node) {
-    console.log(node);
+    let leftBranch = [];
+    let rightBranch = [];
+
+    ++this.LEVEL;
+
+    let firstLevel = [
+      this.createEquivalenceNode(node.level, node.proposition),
+      this.createEquivalenceNode(node.level, node.proposition)
+    ];
+    console.log(firstLevel);
+
+    return [leftBranch, rightBranch];
   }
 
   static constructTrunk(jkif) {
