@@ -13,7 +13,7 @@ export default class Thinker {
     }
   }
 
-  think(jkif) {
+  think(jkif, options = {}) {
     let tree = jkif;
 
     if (!jkif || !this.validateJkif(jkif)) {
@@ -21,7 +21,7 @@ export default class Thinker {
     }
 
     if (!TruthTree.isTruthTree(jkif)) {
-      tree = new TruthTree(jkif);
+      tree = new TruthTree(jkif, options);
     }
 
     return tree.isSatisfiable();

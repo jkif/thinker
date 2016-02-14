@@ -97,10 +97,8 @@ export default class TruthTree {
   }
 
   work(liveBranch) {
-    // if branch has (atomic and completed) nodes, check if closed
     let atomicCompleted = TruthTree.atomicCompletedNodes(liveBranch.nodes);
     if (atomicCompleted.length) {
-      // if atomicCompleted list has any negated nodes, check for contradiction
       if (TruthTree.negatedNodes(atomicCompleted).length) {
         // if contradiction found, close branch and manage tree
         // branch.live = false
@@ -108,13 +106,11 @@ export default class TruthTree {
     }
 
     let _workingNodes = TruthTree.workingNodes(liveBranch.nodes);
-
     if (!_workingNodes.length) {
       liveBranch.decomposed = true;
       return;
     }
 
-    // if branch is still live, decompose each node and repeat
     if (liveBranch.live) {
       R.forEach(this.decomposeNode.bind(this), _workingNodes);
     }
@@ -136,17 +132,14 @@ export default class TruthTree {
     for (let i = 0; i < this.branches.live.length; i++) {
       let branch = this.branches.live[i];
 
-      // console.log(branch);
-      // console.log('before');
+      if (!this.thinking) {
+        throw 'Timeout option made Thinker exit before reaching a conclusion';
+      }
+
       while (!branch.decomposed && branch.live && this.thinking) {
         this.work(branch);
       }
-      // console.log('after');
-      // console.log(branch);
     }
-
-    console.log(this)
-    this.thinking = false;
 
     return R.any(function(branch) {
       return branch.decomposed && branch.live;
