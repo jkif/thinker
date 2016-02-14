@@ -60,20 +60,30 @@ export default class TruthTree {
     let atomicCompleted = TruthTree.atomicCompletedNodes(liveBranch.nodes);
     if (atomicCompleted.length) {
       if (TruthTree.negatedNodes(atomicCompleted).length) {
-        // if contradiction found, close branch and manage tree
-        // branch.live = false
+        this.findContradiction(liveBranch, atomicCompleted);
       }
     }
+    let _workingNodes = this.reduceBranch(liveBranch);
+    if (liveBranch.live && !liveBranch.decomposed) {
+      this.decomposeBranch(_workingNodes);
+    }
+  }
 
-    let _workingNodes = TruthTree.workingNodes(liveBranch.nodes);
-    if (!_workingNodes.length) {
+  findContradiction(branch, nodes) {
+    // if contradiction found, close branch and manage tree
+    // branch.live = false
+  }
+
+  reduceBranch(liveBranch) {
+    let nodes = TruthTree.workingNodes(liveBranch.nodes);
+    if (!nodes.length) {
       liveBranch.decomposed = true;
-      return;
     }
+    return nodes;
+  }
 
-    if (liveBranch.live) {
-      R.forEach(this.decomposeNode.bind(this), _workingNodes);
-    }
+  decomposeBranch(branchNodes) {
+    R.forEach(this.decomposeNode.bind(this), branchNodes);
   }
 
   decomposeNode(node) {
