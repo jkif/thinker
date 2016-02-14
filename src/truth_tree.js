@@ -143,12 +143,12 @@ export default class TruthTree {
   }
 
   manageBranchingDoubleBranches(branches) {
-    // let clonedBranches = this.cloneAllLiveBranches();
-    // this.addToAllBranches(branches[0], this.branches.live);
-    // R.forEach(function(node) {
-    //   this.addToAllBranches(node, clonedBranches);
-    // }.bind(this), branches[1]);
-    // this.branches.live = this.branches.live.concat(clonedBranches);
+    let clonedBranches = this.cloneAllLiveBranches();
+    this.addToAllBranches(branches[0], this.branches.live);
+    R.forEach(function(node) {
+      this.addToAllBranches(node, clonedBranches);
+    }.bind(this), branches[1]);
+    this.branches.live = this.branches.live.concat(clonedBranches);
   }
 
   createConjunctionNode(level, conjunct) {
@@ -188,17 +188,22 @@ export default class TruthTree {
   }
 
   createEquivalence(node) {
-    let leftBranch = [];
-    let rightBranch = [];
-
     ++this.LEVEL;
-
     let firstLevel = [
-      this.createEquivalenceNode(node.level, node.proposition),
-      this.createEquivalenceNode(node.level, node.proposition)
+      this.createEquivalenceNode(node.level, node.proposition[0]),
+      this.createEquivalenceNode(node.level, node.proposition[1])
     ];
-    console.log(firstLevel);
-
+    ++this.LEVEL;
+    let secondLevel = [
+      this.createEquivalenceNode(node.level, node.proposition[0]),
+      this.createEquivalenceNode(node.level, node.proposition[1])
+    ];
+    let leftBranch = [firstLevel[0], secondLevel[0]];
+    let rightBranch = [firstLevel[1], secondLevel[1]];
+    R.map(function(node) {
+      node.negated = true;
+      return node;
+    }, rightBranch);
     return [leftBranch, rightBranch];
   }
 
