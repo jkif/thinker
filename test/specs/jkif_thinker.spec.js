@@ -10,7 +10,14 @@ const expect = chai.expect;
 
 var E = Parser.parse('(exists (?THING)(instance ?THING Entity))');
 var A = Parser.parse('(forall (?THING)(instance ?THING Entity))');
-var neg = Parser.parse('(not (?THING))');
+var word = Parser.parse('Word');
+var negWord = Parser.parse('(not RandomWord)');
+var negRelSent = Parser.parse('(not (instance ?F Farmer))');
+var negConjunction = Parser.parse('(not (and (instance ?F Farmer)(instance ?T Tractor)))');
+var negDisjunction = Parser.parse('(not (or (instance ?F Farmer)(instance ?F Food)))');
+var negImplication = Parser.parse('(not (=> (instance ?F Farmer)(instance ?F Abstract)))');
+var negEquivalence = Parser.parse('(not (<=>(instance ?CLASS Class)(subclass ?CLASS Entity)))');
+var negNegation = Parser.parse('(not (not RandomWord))');
 var varNode = Parser.parse('?THING');
 var relSent = Parser.parse('(instance ?F Farmer)');
 var conj = Parser.parse('(and (instance ?F Farmer)(instance ?T Tractor)(likes ?F ?T))');
@@ -33,7 +40,7 @@ var empty = Parser.parse('');
 var target = Parser.parse('(instance ?FIDDLE Entity)');
 var T = new Thinker();
 
-var result = T.think(equiv);
+var result = T.think(negConjunction);
 
 console.log(result);
 

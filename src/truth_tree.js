@@ -70,6 +70,9 @@ export default class TruthTree {
   }
 
   findContradiction(branch, nodes) {
+    if (nodes.length < 2) {
+      return; // can't find a contradiction if there is only one proposition
+    }
     // if contradiction found, close branch and manage tree
     // branch.live = false
   }
@@ -111,8 +114,11 @@ export default class TruthTree {
         break;
       case 'NegationNode':
         node.completed = true;
-        console.log(node);
-        // Handle 6? different types of negation decomposition
+        let [decompositionType, negationNodes] = this.createNegation(node);
+        if (decompositionType === 'stack') {
+          this.addToAllBranches(negationNodes, this.branches.live);
+        }
+
         break;
       default:
         node.completed = true;
@@ -205,6 +211,19 @@ export default class TruthTree {
       return node;
     }, rightBranch);
     return [leftBranch, rightBranch];
+  }
+
+  createNegation(node) {
+    let [negatedSentence] = node.proposition;
+    let derivationRule = { from: node.level };
+    switch (negatedSentence.type) {
+      default:
+        derivationRule.name = 'negatedAtomDecomposition';
+        let negated = new Node(negatedSentence, ++this.NODE_TACTUS, ++this.LEVEL, derivationRule);
+        negated.negated = true;
+        negated.completed = true;
+        return ['stack', negated];
+    }
   }
 
   static constructTrunk(jkif) {
