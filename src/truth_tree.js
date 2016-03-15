@@ -43,16 +43,16 @@ export default class TruthTree {
   }
 
   evaluateTableaux() {
-    return R.any(function(branch) {
+    return R.any(branch => {
       return branch.decomposed && branch.live;
-    }.bind(this), this.branches.live);
+    }, this.branches.live);
   }
 
   setTimer() {
     if (R.type(this.options.timeout) === 'Number') {
-      setTimeout(function() {
+      setTimeout(_ => {
         this.thinking = false;
-      }.bind(this), this.options.timeout);
+      }, this.options.timeout);
     }
   }
 
@@ -131,18 +131,18 @@ export default class TruthTree {
   }
 
   addToAllBranches(nodeOrNodes, branches) {
-    R.forEach(function(branch) {
+    R.forEach(branch => {
       branch.nodes = branch.nodes.concat(nodeOrNodes);
     }, branches);
   }
 
   cloneAllLiveBranches() {
-    return R.map(function(branch) {
-      let clonedNodes = R.map(function(node) {
+    return R.map(branch => {
+      let clonedNodes = R.map(node => {
         return new Node(node, ++this.NODE_TACTUS);
-      }.bind(this), branch.nodes);
+      }, branch.nodes);
       return new Branch(clonedNodes, ++this.BRANCH_TACTUS, branch.decomposed);
-    }.bind(this), this.branches.live);
+    }, this.branches.live);
   }
 
   manageBranchingBranches(nodesToAdd) {
@@ -155,9 +155,9 @@ export default class TruthTree {
   manageBranchingDoubleBranches(branches) {
     let clonedBranches = this.cloneAllLiveBranches();
     this.addToAllBranches(branches[0], this.branches.live);
-    R.forEach(function(node) {
+    R.forEach(node => {
       this.addToAllBranches(node, clonedBranches);
-    }.bind(this), branches[1]);
+    }, branches[1]);
     this.branches.live = this.branches.live.concat(clonedBranches);
   }
 
@@ -210,7 +210,7 @@ export default class TruthTree {
     ];
     let leftBranch = [firstLevel[0], secondLevel[0]];
     let rightBranch = [firstLevel[1], secondLevel[1]];
-    R.map(function(node) {
+    R.map(node => {
       node.negated = true;
       return node;
     }, rightBranch);
@@ -231,7 +231,7 @@ export default class TruthTree {
   }
 
   static constructTrunk(jkif) {
-    return R.map((prop) => {
+    return R.map(prop => {
       return new Node(prop, ++this.NODE_TACTUS, ++this.LEVEL);
     }, Node.getProps(jkif));
   }
@@ -241,19 +241,19 @@ export default class TruthTree {
   }
 
   static negatedNodes(nodes) {
-    return R.filter(function(atomicNode) {
+    return R.filter(atomicNode => {
       return atomicNode.negated;
     }, nodes);
   }
 
   static atomicCompletedNodes(nodes) {
-    return R.filter(function(node) {
+    return R.filter(node => {
       return node.atomic && node.completed;
     }, nodes);
   }
 
   static workingNodes(nodes) {
-    return R.filter(function(node) {
+    return R.filter(node => {
       return !node.completed;
     }, nodes);
   }

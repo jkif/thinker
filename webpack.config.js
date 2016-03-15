@@ -15,7 +15,10 @@ if (env === 'build') {
 }
 
 var config = {
-  entry: __dirname + '/src/jkif_thinker.js',
+  entry: [
+    'babel-polyfill',
+    path.resolve(__dirname, 'src/jkif_thinker.js')
+  ],
   devtool: 'source-map',
   output: {
     path: __dirname + '/lib',
@@ -27,13 +30,14 @@ var config = {
   module: {
     loaders: [
       {
+        loader: 'babel-loader',
+        include: [path.resolve(__dirname, 'src')],
+        exclude: [path.resolve(__dirname, 'node_modules')],
         test: /\.js$/,
-        loader: 'babel',
-        query:{
-          presets: ['es2015']
-        },
-        include: /src/,
-        exclude: /(node_modules|bower_components)/
+        query: {
+          plugins: ['transform-runtime'],
+          presets: ['es2015', 'stage-0'],
+        }
       }
     ]
   },
